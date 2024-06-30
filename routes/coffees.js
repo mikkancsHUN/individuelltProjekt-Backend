@@ -1,8 +1,19 @@
 import { Router } from "express";
-import { addCoffee, updateCoffee, deleteCoffee } from "../services/coffees.js";
+import { addCoffee, getAllCoffees, updateCoffee, deleteCoffee } from "../services/coffees.js";
 
 const router = Router();
 
+// GET all coffees
+router.get('/', async (req, res) => {
+    try {
+        const coffees = await getAllCoffees();
+        res.status(200).json({ coffees : coffees });
+    } catch (error) {
+        res.status(500).send('Error retrieving coffees');
+    }
+});
+
+// Add new coffee
 router.post('/', async (req, res) => {
     const { id, title, desc, price } = req.body;
     if (!id || !title || !desc || !price) {
@@ -17,6 +28,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Update coffee
 router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const { title, desc, price } = req.body;
@@ -35,6 +47,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// Delete coffee
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
 

@@ -1,22 +1,30 @@
 import nedb from 'nedb-promises';
 
-const usersDb = new nedb({ filename: 'users.db', autoload: true });
+const database = new nedb({ filename: 'users.db', autoload: true });
 
+// Add new user
 async function addUser(user) {
     try {
-        const newUser = await usersDb.insert(user);
+        const newUser = await database.insert(user);
         return newUser;
     } catch(err) {
         throw new Error("Error registering user!");
     }
 }
 
+// GET all users
+async function getAllUsers() {
+    const users = await database.find({});
+    return users;
+}
+
+// Login user
 async function authenticateUser(username, password = null) {
     try {
         const query = { username };
         if (password) query.password = password;
 
-        const user = await usersDb.findOne(query);
+        const user = await database.findOne(query);
         if (!user) {
             throw new Error("Invalid credentials");
         }
@@ -26,4 +34,4 @@ async function authenticateUser(username, password = null) {
     }
 }
 
-export { addUser, authenticateUser };
+export { addUser, getAllUsers, authenticateUser };
