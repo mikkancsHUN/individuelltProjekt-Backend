@@ -19,3 +19,4 @@ router.post('/', adminOnly, async (req, res) => {
 });
 
 export default router;
+

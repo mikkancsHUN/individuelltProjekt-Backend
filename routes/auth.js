@@ -1,8 +1,9 @@
 import express from 'express';
-import { addUser, authenticateUser } from '../services/auth.js';
+import { addUser, getAllUsers, authenticateUser } from '../services/auth.js';
 
 const router = express.Router();
 
+// Add new user
 router.post('/register', async (req, res) => {
     const { username, password, isAdmin } = req.body;
 
@@ -18,6 +19,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Login user
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -32,5 +34,11 @@ router.post('/login', async (req, res) => {
         res.status(401).send(error.message);
     }
 });
+
+// GET all users
+router.get('/users', async(req, res) => {
+    const users = await getAllUsers();
+    res.json({ users : users });
+})
 
 export default router;
